@@ -132,7 +132,7 @@ public class UserView {
                     }
                     break;
                 case 4:
-                    borrowingView.BorrowingBookView();
+                    borrowingView.BorrowingBookViewID(ID);
                     break;
                 case 5:
                     System.out.println("Đây là danh sách hóa đơn của bạn:");

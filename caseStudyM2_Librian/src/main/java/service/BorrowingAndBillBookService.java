@@ -117,6 +117,86 @@ public class BorrowingAndBillBookService {
         }
         return borrowingAndBillBooks;
     }
+    public static List<BorrowingAndBillBook> fixBorrowingBookByID(long IDReader) {
+        System.out.println("Dưới đây là danh sách oder");
+        showBorrowingBook(findListOderByID(IDReader));
+        boolean actionFix = false;
+        while (!actionFix) {
+            System.out.println("Nhập ID oder cần sửa?");
+            long ID = Long.parseLong(CheckInput.checkIDFind());
+            List<BorrowingAndBillBook> borrowingAndBillBook = findBorrowingBookByID(ID);
+            if (borrowingAndBillBook.isEmpty()) {
+                System.out.println("ID bạn nhập không tồn tại, vui lòng thử lại với ID khác!");
+                ID = Long.parseLong(scanner.nextLine());
+                borrowingAndBillBook = findBorrowingBookByID(ID);
+                actionFix = false;
+            } else {
+                System.out.println("Đây là thông tin về oder bạn muốn sửa");
+                showBorrowingBook(borrowingAndBillBook);
+                boolean actionFixBorrowing = false;
+                while (!actionFixBorrowing) {
+                    System.out.println("Bạn muốn sửa thông tin gì?");
+                    System.out.println("╔══════════════════════════════════╗");
+                    System.out.println("║               Menu               ║");
+                    System.out.println("╠══════════════════════════════════║");
+                    System.out.println("║ [1] Sửa số lượng sách muốn mượn  ║");
+                    System.out.println("║ [2] Sửa ngày trả sách            ║");
+                    System.out.println("║ [0] Exit                         ║");
+                    System.out.println("╚══════════════════════════════════╝");
+                    int choice = Integer.parseInt(scanner.nextLine());
+                    switch (choice) {
+                        case 1:
+                            boolean acionFixQuantityBorrowingBook = false;
+                            while (!acionFixQuantityBorrowingBook) {
+                                System.out.println("Nhập ID sách muốn sửa?");
+                                long IDBook = Long.parseLong(CheckInput.checkIDFind());
+                                findBookByID(IDBook).setQuantity(findBorrowingByIDBookAndIDBorrow(IDBook, ID).getQuantity() + findBookByID(IDBook).getQuantity());
+                                ReadAndWrite.writeFile(path3, BookService.books);
+                                System.out.println("Nhập lại số lượng sách muốn mượn?");
+                                int quantity = Integer.parseInt(CheckInput.checkNumber());
+                                if (findBookByID(IDBook).getQuantity() >= quantity) {
+                                    findBorrowingByIDBookAndIDBorrow(IDBook, ID).setQuantity(quantity);
+                                    ReadAndWrite.writeFile(path4, borrowingAndBillBooks);
+                                    System.out.println("Đây là thông tin oder của bạn sau khi sửa số lượng:");
+                                    System.out.println(findBorrowingByIDBookAndIDBorrow(IDBook, ID).toString() + "\n");
+                                    acionFixQuantityBorrowingBook = true;
+                                } else {
+                                    System.out.println("Số lượng bạn nhập vượt quá số lượng sách đang có, mời bạn nhập lại!");
+                                    acionFixQuantityBorrowingBook = false;
+                                }
+                            }
+                            break;
+                        case 2:
+                            boolean actionFixPayDate = false;
+                            while (!actionFixPayDate) {
+                                System.out.println("Nhập ID sách muốn thay đổi ngày trả?");
+                                long IDBook = Long.parseLong(CheckInput.checkIDFind());
+                                System.out.println("Nhập ngày muốn trả?");
+                                String payDate = CheckInput.checkDate();
+                                if (DateUtils.parse(payDate).toInstant().isAfter(findBorrowingByIDBookAndIDBorrow(IDBook, ID).getBorrowDate().toInstant()) || DateUtils.parse(payDate).equals(findBorrowingByIDBookAndIDBorrow(IDBook, ID).getBorrowDate())) {
+                                    findBorrowingByIDBookAndIDBorrow(IDBook, ID).setPayDate(DateUtils.parse(payDate));
+                                    ReadAndWrite.writeFile(path4, borrowingAndBillBooks);
+                                    System.out.println("Đây là thông tin oder của bạn sau khi sửa ngày trả ");
+                                    System.out.println(findBorrowingByIDBookAndIDBorrow(IDBook, ID).toString() + "\n");
+                                    actionFixPayDate = true;
+                                } else {
+                                    System.out.println("Ngày nhập không hợp lệ, ngày nhập vào phải lớn hơn hoặc tổi thiểu bằng ngày hôm nay, vui lòng nhập lại!");
+                                    actionFixPayDate = false;
+                                }
+                            }
+                            break;
+                        case 0:
+                            actionFixBorrowing = true;
+                            actionFix = true;
+                            break;
+                        default:
+                            System.out.println("Lựa chọn của bạn không có trong danh mục, vui lòng nhập lại!");
+                    }
+                }
+            }
+        }
+        return borrowingAndBillBooks;
+    }
 
     public static List<BorrowingAndBillBook> findListOder() {
         borrowingAndBillBooks = ReadAndWrite.readFile(path4, BorrowingAndBillBook.class);
@@ -128,9 +208,41 @@ public class BorrowingAndBillBookService {
         }
         return borrowingAndBillBookList;
     }
+    public static List<BorrowingAndBillBook> findListOderByID(long ID) {
+        borrowingAndBillBooks = ReadAndWrite.readFile(path4, BorrowingAndBillBook.class);
+        List<BorrowingAndBillBook> borrowingAndBillBookList = new ArrayList<>();
+        for (BorrowingAndBillBook borrowingAndBillBook : borrowingAndBillBooks) {
+            if (borrowingAndBillBook.getePay().equals(EPay.UNPAID)&&borrowingAndBillBook.getIDReader()==ID) {
+                borrowingAndBillBookList.add(borrowingAndBillBook);
+            }
+        }
+        return borrowingAndBillBookList;
+    }
 
     public static void  clearBorrowingBook() {
         showBorrowingBook(findListOder());
+        System.out.println("Nhập ID oder cần xóa?");
+        long ID = Long.parseLong(CheckInput.checkIDFind());
+        List<BorrowingAndBillBook> borrowingAndBillBook = findBorrowingBookByID(ID);
+        boolean check = false;
+        while (!check) {
+            if (borrowingAndBillBook.isEmpty()) {
+                System.out.println("ID bạn nhập không tồn tại, vui lòng thử lại với ID khác!");
+                ID = Long.parseLong(scanner.nextLine());
+                borrowingAndBillBook = findBorrowingBookByID(ID);
+                check = false;
+            } else {
+                System.out.println("Đây là oder bạn muốn xóa");
+                showBorrowingBook(borrowingAndBillBook);
+                System.out.println("Đây là danh sách oder sau khi bạn xóa");
+                borrowingAndBillBooks.removeAll(borrowingAndBillBook);
+                ReadAndWrite.writeFile(path4, borrowingAndBillBooks);
+                check = true;
+            }
+        }
+    }
+    public static void  clearBorrowingBookID(long IDReader) {
+        showBorrowingBook(findListOderByID(IDReader));
         System.out.println("Nhập ID oder cần xóa?");
         long ID = Long.parseLong(CheckInput.checkIDFind());
         List<BorrowingAndBillBook> borrowingAndBillBook = findBorrowingBookByID(ID);

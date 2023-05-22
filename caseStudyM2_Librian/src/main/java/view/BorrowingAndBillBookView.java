@@ -58,6 +58,41 @@ public class BorrowingAndBillBookView {
             }
         }
     }
+    public void BorrowingBookViewID(long ID) {
+        boolean actionBill = false;
+        while (!actionBill) {
+            System.out.println("╔═════════════════════════════════════════╗");
+            System.out.println("║                   Menu                  ║");
+            System.out.println("╠═════════════════════════════════════════╣");
+            System.out.println("║ [1] Xem toàn bộ oder                    ║");
+            System.out.println("║ [2] Tìm kiếm order                      ║");
+            System.out.println("║ [3] Sửa thông tin oder                  ║");
+            System.out.println("║ [4] Xóa order khỏi danh sách            ║");
+            System.out.println("║ [0] Exit                                ║");
+            System.out.println("╚═════════════════════════════════════════╝");
+            int choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1:
+                    borrowingAndBillBookService.showBorrowingBook(findListOderByID(ID));
+                    break;
+                case 2:
+                    findBorrowingBook();
+                    break;
+                case 3:
+                    borrowingAndBillBookService.fixBorrowingBookByID(ID);
+                    break;
+                case 4:
+                    clearBorrowingBookID(ID);
+                    showBorrowingBook(findListOderByID(ID));
+                    break;
+                case 0:
+                    actionBill = true;
+                    break;
+                default:
+                    System.out.println("Lựa chọn bạn không có trong danh sách, vui lòng lựa chọn lại!");
+            }
+        }
+    }
 
     public void BillBooKView() {
         boolean actionBill = false;
