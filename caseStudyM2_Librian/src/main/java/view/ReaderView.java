@@ -33,11 +33,11 @@ public class ReaderView {
             switch (choice) {
                 case 1:
                     readers= ReadAndWrite.readFile(path5,Reader.class);
-                    showReader(readers);
+                    showReader(ReadAndWrite.readFile(path5,Reader.class));
                     break;
                 case 2:
                     addReader();
-                    showReader(readers);
+                    showReader(ReadAndWrite.readFile(path5,Reader.class));
                     break;
                 case 3:
                     fixReader();

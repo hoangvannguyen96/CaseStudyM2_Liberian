@@ -14,11 +14,11 @@ public class ReaderService {
     public static final String path5 = "E:\\CaseStudyM2_Liberian\\caseStudyM2_Librian\\src\\main\\java\\data\\reader.csv";
     public static final String path1 = "E:\\CaseStudyM2_Liberian\\caseStudyM2_Librian\\src\\main\\java\\data\\user.csv";
     private static List<Reader> readers;
-    private static List<AdminAndUser> adminAndUsers;
+    private static List<User> users;
 
     static {
         readers = ReadAndWrite.readFile(path5, Reader.class);
-        adminAndUsers = ReadAndWrite.readFile(path1, AdminAndUser.class);
+        users = ReadAndWrite.readFile(path1, User.class);
     }
 
     public static Scanner scanner = new Scanner(System.in);
@@ -33,9 +33,13 @@ public class ReaderService {
         String jobReader = scanner.nextLine();
         System.out.println("Nhập địa chỉ của đọc giả?");
         String addressReader = scanner.nextLine();
+        String password = CheckInput.checkPassword();
         Reader reader = new Reader(System.currentTimeMillis() / 1000, nameReader, sexReader, DateUtils.parse(dateOfBirthReader), jobReader, addressReader);
         readers.add(reader);
         ReadAndWrite.writeFile(path5, readers);
+        User user = new User(System.currentTimeMillis() / 1000, nameReader, password, EUser.USER);
+        users.add(user);
+        UserService.writeFileAdminAndUser(users);
         return reader;
     }
 
@@ -130,8 +134,8 @@ public class ReaderService {
                 System.out.println("Đây là danh sách đọc giả sau khi bạn xóa");
                 readers.remove(reader);
                 ReadAndWrite.writeFile(path5, readers);
-                adminAndUsers.remove(UserService.findReaderInUserFile(ID));
-                ReadAndWrite.writeFile(path1, adminAndUsers);
+                users.remove(UserService.findReaderInUserFile(ID));
+                ReadAndWrite.writeFile(path1, users);
                 check = true;
             }
         }

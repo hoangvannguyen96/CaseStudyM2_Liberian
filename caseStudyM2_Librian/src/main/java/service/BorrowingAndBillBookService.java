@@ -250,10 +250,10 @@ public class BorrowingAndBillBookService {
     }
 
     public static void showBorrowingBook(List<BorrowingAndBillBook> borrowingAndBillBooks) {
-        System.out.printf("%-10s %-10s %-10s %-10s %-15s %-10s %-15s %-15s %-10s %-10s\n", "ID", "ID đọc giả", "ID NV",
+        System.out.printf("%-10s %-15s %-15s %-15s %-15s %-10s %-15s %-15s %-10s %-10s\n", "ID", "ID đọc giả", "ID NV",
                 "ID sách", "Tên sách", "Số lượng", "Ngày mượn", "Ngày trả", "Tiền", "Trạng thái");
         for (BorrowingAndBillBook borrowingAndBillBook : borrowingAndBillBooks) {
-            System.out.printf("%-10s %-10s %-10s %-10s %-15s %-10s %-15s %-15s %-10s %-10s\n", borrowingAndBillBook.getIDBrrowing(),
+            System.out.printf("%-10s %-15s %-15s %-15s %-15s %-10s %-15s %-15s %-10s %-10s\n", borrowingAndBillBook.getIDBrrowing(),
                     borrowingAndBillBook.getIDReader(), borrowingAndBillBook.getIDSatff(), borrowingAndBillBook.getIDBook(), borrowingAndBillBook.getNameBook(),
                     borrowingAndBillBook.getQuantity(), DateUtils.format(borrowingAndBillBook.getBorrowDate()), DateUtils.format(borrowingAndBillBook.getPayDate()),
                     borrowingAndBillBook.getDeposit(), borrowingAndBillBook.getePay());
@@ -467,7 +467,7 @@ public class BorrowingAndBillBookService {
     public List<BorrowingAndBillBook> InforByPayDate(){
         List<BorrowingAndBillBook> borrowingAndBillBookList=new ArrayList<>();
         for(BorrowingAndBillBook borrowingAndBillBook:borrowingAndBillBooks){
-            if(borrowingAndBillBook.getPayDate().equals(new Date())&&borrowingAndBillBook.getePay().equals(EPay.PAID)){
+            if(DateUtils.format(borrowingAndBillBook.getPayDate()).equals(DateUtils.format(new Date()))&&borrowingAndBillBook.getePay().equals(EPay.PAID)){
                 borrowingAndBillBookList.add(borrowingAndBillBook);
             }
         }

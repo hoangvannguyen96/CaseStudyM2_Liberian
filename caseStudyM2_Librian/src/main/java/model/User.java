@@ -1,19 +1,19 @@
 package model;
 
-public class AdminAndUser implements IModel<AdminAndUser> {
+public class User implements IModel<User> {
     private long ID;
     private String userName;
     private String password;
-    private EAdminAndUser eAdminAndUser;
+    private EUser eUser;
 
-    public AdminAndUser() {
+    public User() {
     }
 
-    public AdminAndUser(long ID, String userName, String password, EAdminAndUser eAdminAndUser) {
+    public User(long ID, String userName, String password, EUser eUser) {
         this.ID = ID;
         this.userName = userName;
         this.password = password;
-        this.eAdminAndUser = eAdminAndUser;
+        this.eUser = eUser;
     }
 
     public long getID() {
@@ -40,12 +40,12 @@ public class AdminAndUser implements IModel<AdminAndUser> {
         this.password = password;
     }
 
-    public EAdminAndUser geteAdminAndUser() {
-        return eAdminAndUser;
+    public EUser geteAdminAndUser() {
+        return eUser;
     }
 
-    public void seteAdminAndUser(EAdminAndUser eAdminAndUser) {
-        this.eAdminAndUser = eAdminAndUser;
+    public void seteAdminAndUser(EUser eUser) {
+        this.eUser = eUser;
     }
 
     @Override
@@ -58,6 +58,6 @@ public class AdminAndUser implements IModel<AdminAndUser> {
         ID=Long.parseLong(items[0]);
         userName=items[1];
         password=items[2];
-        eAdminAndUser=EAdminAndUser.getAdminAndUserByName(items[3]);
+        eUser = EUser.getAdminAndUserByName(items[3]);
     }
 }

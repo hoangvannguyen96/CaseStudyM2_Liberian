@@ -1,5 +1,6 @@
 package view;
 
+import service.BookService;
 import utils.CheckInput;
 import utils.ReadAndWrite;
 import model.Book;
@@ -41,7 +42,7 @@ public class BookView {
             int choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
                 case 0:
-                    showBook(books);
+                    showBook(ReadAndWrite.readFile(path3, Book.class));
                     break;
                 case 1:
                     showBook(addBook());

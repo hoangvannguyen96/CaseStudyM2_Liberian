@@ -12,7 +12,7 @@ import static service.BookService.findBookByID;
 import static service.BookService.findListBook;
 import static service.BorrowingAndBillBookService.*;
 
-public class AdminAndUserView {
+public class UserView {
     public static final String path4 = "E:\\CaseStudyM2_Liberian\\caseStudyM2_Librian\\src\\main\\java\\data\\billandborrowing.csv";
     public static final String path3 = "E:\\CaseStudyM2_Liberian\\caseStudyM2_Librian\\src\\main\\java\\data\\book.csv";
     private static BookView bookView;
